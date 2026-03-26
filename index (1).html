@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚽ ULTRAKICK — Soccer FSM</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23f5d020' stroke='%23b39000' stroke-width='2'/%3E%3Cpolygon points='32,10 38,20 26,20' fill='%23111'/%3E%3Cpolygon points='50,22 54,34 44,30' fill='%23111'/%3E%3Cpolygon points='46,50 36,52 40,42' fill='%23111'/%3E%3Cpolygon points='18,50 24,42 28,52' fill='%23111'/%3E%3Cpolygon points='14,22 20,30 10,34' fill='%23111'/%3E%3Cpolygon points='32,20 40,26 37,36 27,36 24,26' fill='%23111'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- SCREENS -->
+  <div id="menuScreen" class="screen">
+    <div class="menu-ball">⚽</div>
+    <div class="menu-logo">ULTRAKICK</div>
+    <div class="menu-sub">FSM Soccer · Browser Edition</div>
+    <button class="btn" id="playBtn">▶ PLAY</button>
+    <div class="menu-controls">
+      WASD — Move &nbsp;|&nbsp; SHIFT — Sprint &nbsp;|&nbsp; SPACE (hold) — Charge Kick<br>
+      AIM with Mouse &nbsp;|&nbsp; RIGHT-CLICK — Tackle &nbsp;|&nbsp; SCROLL — Zoom &nbsp;|&nbsp; ESC — Pause
+    </div>
+  </div>
+
+  <div id="pauseScreen" class="screen hidden">
+    <div class="pause-title">PAUSED</div>
+    <button class="btn" id="resumeBtn">▶ RESUME</button>
+    <button class="btn red" id="quitBtn">✕ QUIT</button>
+  </div>
+
+  <div id="gameOverScreen" class="screen hidden">
+    <div class="go-title">FINAL SCORE</div>
+    <div class="go-score">YOU <span id="goPlayerScore">0</span> – <span id="goAiScore">0</span> AI</div>
+    <div class="go-final" id="goResult">DRAW</div>
+    <button class="btn" id="restartBtn">↺ PLAY AGAIN</button>
+    <button class="btn red" id="menuBtn">← MENU</button>
+  </div>
+
+  <!-- HUD -->
+  <div id="hud" class="hidden">
+    <div>
+      <div class="hud-label">YOU</div>
+      <div class="hud-score" id="playerScore">0</div>
+      <div class="bar-wrap">
+        <span class="bar-icon">❤</span>
+        <div class="bar"><div class="bar-fill" id="healthFill"></div></div>
+      </div>
+      <div class="bar-wrap" style="margin-top:3px">
+        <span class="bar-icon">⚡</span>
+        <div class="bar"><div class="bar-fill" id="staminaFill"></div></div>
+      </div>
+    </div>
+    <div class="hud-mid">
+      <div class="hud-timer" id="timerDisplay">3:00</div>
+      <div class="hud-label">TIME</div>
+      <div class="bar-wrap" style="margin-top:3px">
+        <span class="bar-icon" style="color:#f5d020">⚽</span>
+        <div class="bar"><div class="bar-fill" id="kickFill" style="background:linear-gradient(90deg,#f5d020,#fff);width:0%"></div></div>
+      </div>
+    </div>
+    <div style="text-align:right">
+      <div class="hud-label">AI</div>
+      <div class="hud-score" id="aiScore">0</div>
+      <button class="hud-mute" id="muteBtn">🔊</button>
+    </div>
+  </div>
+
+  <!-- CANVAS -->
+  <canvas id="gameCanvas"></canvas>
+
+  <!-- MINIMAP -->
+  <canvas id="minimap" class="hidden" width="160" height="90"></canvas>
+
+  <!-- FSM DEBUG -->
+  <div id="stateDebug" class="hidden"></div>
+
+  <!-- NOTIFICATION -->
+  <div id="notification"></div>
+
+  <!-- SCRIPTS — order matters: fsm → player → enemy → main -->
+  <script src="js/fsm.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/enemy.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>

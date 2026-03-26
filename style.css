@@ -1,0 +1,237 @@
+/* ══════════════════════════════════════════════════════════
+   style.css  ·  ULTRAKICK — Soccer FSM Game
+   ══════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Barlow+Condensed:wght@400;600;700;900&display=swap');
+
+:root {
+  --green: #1a6b2e;
+  --green-light: #2d9e47;
+  --green-dark: #0e3d1a;
+  --white: #f5f5f0;
+  --yellow: #f5d020;
+  --red: #e63946;
+  --blue: #1d6fa4;
+  --bg: #0a1a0f;
+  --hud-bg: rgba(0, 0, 0, 0.75);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  font-family: 'Barlow Condensed', sans-serif;
+  color: var(--white);
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+canvas { display: block; cursor: crosshair; }
+
+/* ── SCREENS ──────────────────────────────────────────── */
+.screen {
+  position: fixed; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  z-index: 100;
+  transition: opacity .35s;
+}
+.screen.hidden { opacity: 0; pointer-events: none; }
+
+/* MENU */
+#menuScreen { background: radial-gradient(ellipse at 50% 60%, #1a6b2e 0%, #0a1a0f 70%); }
+
+.menu-logo {
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: clamp(48px, 8vw, 96px);
+  color: var(--yellow);
+  text-shadow: 0 0 40px rgba(245,208,32,.5), 4px 4px 0 #b39000;
+  letter-spacing: 4px;
+  margin-bottom: 8px;
+  animation: pulse 2s ease-in-out infinite;
+}
+.menu-sub {
+  font-size: clamp(14px, 2vw, 20px);
+  letter-spacing: 6px;
+  color: var(--green-light);
+  text-transform: uppercase;
+  margin-bottom: 48px;
+}
+.menu-ball {
+  font-size: 64px;
+  margin-bottom: 24px;
+  animation: spin 4s linear infinite;
+}
+.menu-controls {
+  margin-top: 28px;
+  font-size: 13px;
+  color: rgba(255,255,255,.45);
+  letter-spacing: 2px;
+  text-align: center;
+  line-height: 2.2;
+}
+
+/* BUTTONS */
+.btn {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  padding: 14px 48px;
+  border: 3px solid var(--yellow);
+  background: transparent;
+  color: var(--yellow);
+  cursor: pointer;
+  transition: all .2s;
+  margin: 8px;
+  clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+}
+.btn:hover {
+  background: var(--yellow);
+  color: #000;
+  transform: scale(1.05);
+  box-shadow: 0 0 24px rgba(245,208,32,.6);
+}
+.btn.red  { border-color: var(--red);  color: var(--red); }
+.btn.red:hover  { background: var(--red);  color: #fff; box-shadow: 0 0 24px rgba(230,57,70,.6); }
+
+/* HUD */
+#hud {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 60px;
+  background: var(--hud-bg);
+  backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px;
+  z-index: 50;
+  border-bottom: 2px solid rgba(245,208,32,.3);
+  font-size: 15px;
+  letter-spacing: 2px;
+}
+#hud.hidden { display: none; }
+
+.hud-score {
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: 28px;
+  color: var(--yellow);
+  min-width: 120px;
+  text-align: center;
+}
+.hud-mid {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+}
+.hud-timer {
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: 22px;
+  color: var(--white);
+}
+.hud-label { font-size: 10px; color: rgba(255,255,255,.4); letter-spacing: 3px; }
+
+.bar-wrap { display: flex; align-items: center; gap: 8px; }
+.bar-icon { font-size: 12px; color: rgba(255,255,255,.5); }
+.bar {
+  width: 100px; height: 10px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%; width: 100%;
+  transition: width .25s;
+}
+#healthFill {
+  background: linear-gradient(90deg, #e63946, #f5d020, #2d9e47);
+  background-size: 300% 100%;
+  background-position: right;
+  transition: width .25s, background-position .25s;
+}
+#staminaFill { background: linear-gradient(90deg, #1d6fa4, #6af); }
+#kickFill    { background: linear-gradient(90deg, #f5d020, #fff); }
+
+.hud-mute {
+  cursor: pointer; font-size: 20px;
+  background: none; border: none; color: var(--white);
+  opacity: .6; transition: opacity .2s;
+}
+.hud-mute:hover { opacity: 1; }
+
+/* PAUSE */
+#pauseScreen { background: rgba(0,0,0,.82); backdrop-filter: blur(12px); }
+.pause-title {
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: 64px;
+  color: var(--yellow);
+  margin-bottom: 32px;
+  letter-spacing: 8px;
+}
+
+/* GAME OVER */
+#gameOverScreen { background: radial-gradient(ellipse at 50% 50%, #3d0a0a 0%, #000 70%); }
+.go-title {
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: clamp(40px, 7vw, 80px);
+  color: var(--red);
+  text-shadow: 0 0 40px rgba(230,57,70,.6);
+  margin-bottom: 16px;
+  letter-spacing: 6px;
+}
+.go-score { font-size: 28px; color: var(--white); margin-bottom: 8px; letter-spacing: 3px; }
+.go-final {
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: 48px;
+  color: var(--yellow);
+  margin-bottom: 40px;
+}
+
+/* MINIMAP */
+#minimap {
+  position: fixed; bottom: 16px; right: 16px;
+  border: 2px solid rgba(245,208,32,.4);
+  background: rgba(0,0,0,.5);
+  border-radius: 4px;
+  z-index: 50;
+}
+#minimap.hidden { display: none; }
+
+/* FSM DEBUG */
+#stateDebug {
+  position: fixed; bottom: 16px; left: 16px;
+  font-size: 11px;
+  color: rgba(255,255,255,.4);
+  letter-spacing: 1px;
+  z-index: 50;
+  line-height: 1.9;
+}
+#stateDebug.hidden { display: none; }
+
+/* NOTIFICATION */
+#notification {
+  position: fixed; top: 76px; left: 50%; transform: translateX(-50%);
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: 32px;
+  color: var(--yellow);
+  text-shadow: 0 0 20px rgba(245,208,32,.8);
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0;
+  transition: opacity .3s;
+  letter-spacing: 4px;
+  white-space: nowrap;
+}
+
+/* ANIMATIONS */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.03); }
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
